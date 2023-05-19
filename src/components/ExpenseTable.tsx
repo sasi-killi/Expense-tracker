@@ -1,3 +1,5 @@
+import { useState } from "react";
+import CategoryFilter from "./CategoryFilter";
 import { Props } from "./ExpenseForm";
 
 export interface ExpenseObject {
@@ -8,16 +10,26 @@ export interface ExpenseObject {
 }
 
 function ExpenseTable({ expenses, updateExpense }: Props) {
+  const [filterValue, setFilterValue] = useState("All");
   const handleDelete = (id: number) => {
     updateExpense(expenses.filter((expense) => expense.id !== id));
   };
 
-  const total = expenses.reduce((acc, item) => {
+  const filterExpenses = () => {
+    if (filterValue !== "All")
+      return expenses.filter((expense) => expense.category === filterValue);
+    return expenses;
+  };
+
+  const displayExpenses = filterExpenses();
+
+  const total = displayExpenses.reduce((acc, item) => {
     return acc + item.amount;
   }, 0);
 
   return (
     <>
+      <CategoryFilter setFilterValue={setFilterValue} />
       <table className="table table-bordered mt-3">
         <thead>
           <tr>
@@ -28,7 +40,7 @@ function ExpenseTable({ expenses, updateExpense }: Props) {
           </tr>
         </thead>
         <tbody>
-          {expenses.map((expense) => (
+          {displayExpenses.map((expense) => (
             <tr key={expense.id}>
               <td>{expense.description}</td>
               <td>{expense.amount}</td>
