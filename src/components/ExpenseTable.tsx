@@ -43,11 +43,11 @@ function ExpenseTable({ expenses, updateExpense }: Props) {
           {displayExpenses.map((expense) => (
             <tr key={expense.id}>
               <td>{expense.description}</td>
-              <td>{expense.amount}</td>
+              <td>${expense.amount}</td>
               <td>{expense.category}</td>
               <td>
                 <button
-                  className="btn btn-danger"
+                  className="btn btn-outline-danger"
                   onClick={() => handleDelete(expense.id)}
                 >
                   Delete
@@ -55,15 +55,17 @@ function ExpenseTable({ expenses, updateExpense }: Props) {
               </td>
             </tr>
           ))}
-          {Boolean(total) && (
+        </tbody>
+        {Boolean(total) && (
+          <tfoot>
             <tr>
               <td>Total</td>
-              <td>{total}</td>
+              <td>${total.toFixed(2)}</td>
               <td> </td>
               <td> </td>
             </tr>
-          )}
-        </tbody>
+          </tfoot>
+        )}
       </table>
     </>
   );
